@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const userSchema  =  new Schema({
     userEmail : {
         type : String,
-        required : [true,'userEmail must be provided']
+        required : [true,'userEmail must be provided'],
+  
     },
     userPhoneNumber : {
         type : Number,
@@ -30,6 +31,8 @@ const userSchema  =  new Schema({
         type : Boolean,
         default : false
     }
+},{
+    timestamps : true
 })
 
 const User = mongoose.model("User",userSchema)
