@@ -7,6 +7,7 @@ const { registerUser, loginUser } = require("./controller/auth/authController")
 //ROUTES HERE
 const authRoute = require("./routes/authRoute")
 const productRoute = require("./routes/productRoute")
+const adminUsersRoute = require("./routes/adminUsersRoute")
 
 //Routes end here
 
@@ -35,6 +36,7 @@ app.get("/",(req,res)=>{
 
 app.use("/api",authRoute)
 app.use("/api",productRoute)
+app.use("/api",adminUsersRoute)
 // // /register ->
 // // /login
 // app.use("/hello",authRoute)
