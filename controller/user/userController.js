@@ -46,7 +46,7 @@ exports.getProductReview = async(req,res)=>{
             message : "Product with that id doesn't exist"
         })
     }
-    const reviews  = await Review.find({productId  }).populate("userId")
+    const reviews  = await Review.find({productId  }).populate("userId").populate("productId")
     res.status(200).json({
         message : "review fetched successfully",
         data : reviews
