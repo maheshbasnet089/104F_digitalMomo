@@ -34,52 +34,7 @@ exports.createProduct = async (req,res)=>{
 
 }
 
-exports.getProducts = async(req,res)=>{
- 
-    const products = await Product.find().populate({
-        path : "reviews",
-        populate :  {
-            path : "userId",
-            select : "userName userEmail"
-        }
-    })
-    if(products.length == 0 ){
-        res.status(400).json({
-            message : "No product Found",
-            products : []
-        })
-    }else{
-        res.status(200).json({
-            message : "Products Fetched Successfully",
-            products  
-        })
-    }
-   
-}
 
-
-exports.getProduct = async(req ,res)=>{
-
-        const {id} = req.params
-    if(!id){
-        return res.status(400).json({
-            message : "Please provide id(productId)"
-        })
-    }
-    const product = await Product.find({_id : id})
-    if(product.length == 0){
-        res.status(400).json({
-            message : "No product found with that id",
-            product : []
-        })
-    }else{
-        res.status(200).json({
-            message : "Product fetched successfully",
-            product 
-        })
-    }
- 
-}
 
 exports.deleteProduct =  async(req,res)=>{
     const {id} = req.params
@@ -156,6 +111,6 @@ exports.editProduct = async(req,res)=>{
     })
     res.status(200).json({
         messagee : "Product updated successfully",
-        datas
+        data : datas
     })
 }

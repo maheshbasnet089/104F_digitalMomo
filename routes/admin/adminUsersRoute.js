@@ -1,6 +1,6 @@
-const { getUsers, deleteUser } = require("../controller/admin/user/userController")
-const isAuthenticated = require("../middleware/isAuthenticated")
-const restrictTo = require("../middleware/restrictTo")
+const { getUsers, deleteUser } = require("../../controller/admin/user/userController")
+const isAuthenticated = require("../../middleware/isAuthenticated")
+const restrictTo = require("../../middleware/restrictTo")
 
 const router = require("express").Router()
 

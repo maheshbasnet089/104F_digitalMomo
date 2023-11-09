@@ -2,13 +2,14 @@ const express = require("express")
 const { connectDatabase } = require("./database/database")
 const app = express()
 
-const { registerUser, loginUser } = require("./controller/auth/authController")
+
 
 //ROUTES HERE
-const authRoute = require("./routes/authRoute")
-const productRoute = require("./routes/productRoute")
-const adminUsersRoute = require("./routes/adminUsersRoute")
-const userReviewRoute = require("./routes/userReviewRoute")
+const authRoute = require("./routes/auth/authRoute")
+const productRoute = require("./routes/admin/productRoute")
+const adminUsersRoute = require("./routes/admin/adminUsersRoute")
+const userReviewRoute = require("./routes/user/userReviewRoute")
+const profileRoute = require("./routes/user/profileRoute")
 
 //Routes end here
 
@@ -35,10 +36,11 @@ app.get("/",(req,res)=>{
     })
 })
 
-app.use("/api",authRoute)
-app.use("/api",productRoute)
-app.use("/api",adminUsersRoute)
-app.use("/api",userReviewRoute)
+app.use("/api/auth",authRoute)
+app.use("/api/products",productRoute)
+app.use("/api/admin",adminUsersRoute)
+app.use("/api/reviews",userReviewRoute)
+app.use("/api/profile",profileRoute)
 // app.use("/hello",authRoute)
 // /hello/register
 // /hello/login

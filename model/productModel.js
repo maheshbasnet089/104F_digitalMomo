@@ -25,7 +25,7 @@ const productSchema = new Schema({
         enum : ["available","unavailable"]
     },
     productImage : String,
-    reviews : [reviewSchema]
+    // reviews : [reviewSchema]
 },{
     timestamps : true
 })
