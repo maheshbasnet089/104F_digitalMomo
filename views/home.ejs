@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #chat-container {
+      max-width: 400px;
+      margin: 20px auto;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-header {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    
+    #chat-messages {
+      padding: 10px;
+      overflow-y: scroll;
+      max-height: 300px;
+    }
+    
+    .message {
+      background-color: #ecf0f1;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    
+    .user-message {
+      background-color: #2ecc71;
+      color: #fff;
+    }
+    
+    .input-container {
+      display: flex;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+    }
+    
+    input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+    
+    .send-button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 15px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      Chat
+    </div>
+    <div id="chat-messages">
+        
+      <!-- Messages will be displayed here -->
+    </div>
+    <form id="input-container">
+      <input type="text" id="messageInput" placeholder="Type a message...">
+      <button class="send-button" >Send</button>
+    </form>
+  </div>
+  <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+
+  <script>
+    var socket = io()
+    var message = document.getElementById("messageInput")
+    var form = document.getElementById("input-container")
+    var chatMessagesContainer = document.getElementById("chat-messages")
+    message
+
+
+    form.addEventListener("submit",(e)=>{
+        e.preventDefault();
+        
+        if(message.value){
+            const data = {
+    message : message.value ,
+    senderId : 1 ,
+    receiverId : 2
+ }
+ console.log(data)
+            // socket ma emit garxu 
+            socket.emit("message",data)
+            message.value = ""
+        }
+    })
+
+    socket.on("broadCastMessage",(msg)=>{
+      const paragraph  =  document.createElement("p")  //<p> </p>
+      paragraph.textContent  = msg // <p>Hello there </p>
+
+      chatMessagesContainer.appendChild(paragraph)
+
+    })
+
+  </script>
+</body>
+</html>
