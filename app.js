@@ -15,6 +15,7 @@ const cartRoute = require("./routes/user/cartRoute")
 const orderRoute = require("./routes/user/orderRoute")
 const adminOrdersRoute = require("./routes/admin/adminOrderRoute")
 const paymentRoute = require("./routes/user/paymentRoute")
+const User = require("./model/userModel")
 
 //Routes end here
 
@@ -61,16 +62,29 @@ app.use("/api/payment",paymentRoute)
 
 const PORT = process.env.PORT
 //listen server 
-const server = app.listen(4000,()=>{
+const server = app.listen(3000,()=>{
     console.log(`Server has started at PORT ${PORT} ` )
 })
 const io = new Server(server)
 
-io.on("connection",(socket)=>{
-    socket.on("hello",(data)=>{
-        console.log(data)
-    })
-
-})
 
 
+// io.on("connection",(socket)=>{
+//  socket.on("register",async (data)=>{
+//     const {username,phoneNumber,email,password} = data
+//     // await User.create({
+//     //     userName : username,
+//     //     userPhoneNumber : phoneNumber,
+//     //     userEmail : email,
+//     //     userPassword : password
+//     // })
+//     // io.emit('response',{message : "User REgistered"})
+//     io.to(socket.id).emit('response',{message : "user registered"})
+//  })
+
+// })
+function getSocketIo(){
+    return io 
+}
+
+module.exports.getSocketIo = getSocketIo
