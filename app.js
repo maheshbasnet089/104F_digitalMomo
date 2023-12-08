@@ -3,6 +3,7 @@ const { connectDatabase } = require("./database/database")
 const app = express()
 
 const {Server} =  require("socket.io")
+const cors = require("cors")
 
 
 //ROUTES HERE
@@ -19,7 +20,9 @@ const User = require("./model/userModel")
 
 //Routes end here
 
-
+app.use(cors({
+    origin : '*'
+}))
 
 // TELL NODE TO USE DOTENV
 require("dotenv").config()
