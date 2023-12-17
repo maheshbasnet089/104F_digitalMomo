@@ -18,10 +18,22 @@ exports.addToCart = async(req,res)=>{
         })
     }
     const user = await User.findById(userId)
-    user.cart.push(productId)
+    // check if that productId already exist or not , yeti xa vaney qty matra badaunu paryo na vaye productId
+    const existingCartItem = user.cart.find((item)=>item.product.equals(productId))
+
+    if(existingCartItem){
+        existingCartItem.quantity+=1;
+    }else{
+        user.cart.push({
+            product : productId,
+            quantity : 1
+        })
+    }
     await user.save()
+    const updatedUser = await User.findById(userId).populate('cart.product')
     res.status(200).json({
-        message: "Product added to cart"
+        message: "Product added to cart",
+        data : updatedUser.cart
     })
 
 }
@@ -29,7 +41,7 @@ exports.addToCart = async(req,res)=>{
 exports.getMyCartItems = async(req,res)=>{
     const userId = req.user.id 
     const userData = await User.findById(userId).populate({
-        path : "cart",
+        path : "cart.product",
         select : "-productStatus"
     }) 
    
@@ -62,4 +74,27 @@ user.cart =   user.cart.filter(pId=>pId != productId) // [1,2,3] ==> 2 ==>fiter 
   res.status(200).json({
     message : "Item removed From Cart"
   })
+}
+
+exports.updateCartItems = async(req,res)=>{
+    const userId = req.user.id
+    const {productId} = req.params 
+    const {quantity} = req.body 
+
+    const user = await User.findById(userId)
+    console.log(user)
+    const cartItem = user.cart.find((item)=>item.product.equals(productId))
+    if(!cartItem){
+        return res.status(404).json({
+            message : "No item with that Id"
+        })
+    }
+
+    cartItem.quantity = quantity ;
+    await user.save()
+
+    res.status(200).json({
+        message : "Item updated successfully",
+        data : user.cart
+    })
 }
