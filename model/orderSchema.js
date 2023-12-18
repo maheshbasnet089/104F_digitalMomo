@@ -10,6 +10,7 @@ const orderSchema = new Schema({
     }],
     totalAmount : {type:Number,required:true},
     shippingAddress : {type:String, required:true},
+    phoneNumber : {type:Number,required : true},
     orderStatus : {
         type:String,
         enum : ['pending','delivered','cancelled','ontheway','preparation'],

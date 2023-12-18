@@ -20,12 +20,14 @@ const isAuthenticated = async (req,res,next)=>{
     //         res.status(200).json({
     //             message : "Valid Token"
     //         })
-    //     }
+  //     }
     // })
 
     // ALTERNATIVE
   try {
+    
     const decoded = await promisify(jwt.verify)(token,process.env.SECRET_KEY)
+   
     const doesUserExist =  await User.findOne({_id : decoded.id})
 
    if(!doesUserExist){
