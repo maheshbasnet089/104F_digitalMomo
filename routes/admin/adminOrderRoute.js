@@ -5,8 +5,8 @@ const catchAsync = require("../../services/catchAsync")
 
 const router = require("express").Router()
 
-router.route("/").get(isAuthenticated,restrictTo("admin"),catchAsync(getAllOrders))
-router.route("/:id").get(isAuthenticated,restrictTo("admin"),catchAsync(getSingleOrder)).patch(isAuthenticated,restrictTo("admin"),catchAsync(updateOrderStatus)).delete(isAuthenticated,restrictTo("admin"),catchAsync(deleteOrder))
+router.route("/orders").get(isAuthenticated,restrictTo("admin"),catchAsync(getAllOrders))
+router.route("/orders/:id").get(isAuthenticated,restrictTo("admin"),catchAsync(getSingleOrder)).patch(isAuthenticated,restrictTo("admin"),catchAsync(updateOrderStatus)).delete(isAuthenticated,restrictTo("admin"),catchAsync(deleteOrder))
 
 
 module.exports = router
