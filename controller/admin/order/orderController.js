@@ -5,7 +5,7 @@ exports.getAllOrders = async(req,res)=>{
     const orders = await Order.find().populate({
         path:"items.product",
         model : "Product"
-    })
+    }).populate('user')
     if(orders.length == 0 ){
         return res.status(404).json({
             message : "No orders",
@@ -50,7 +50,10 @@ exports.updateOrderStatus = async(req,res)=>{
     }
     const updatedOrder = await Order.findByIdAndUpdate(id,{
         orderStatus
-    },{new:true})
+    },{new:true}).populate({
+        path:"items.product",
+        model : "Product"
+    }).populate('user')
 
     res.status(200).json({
         message : "Order status updated Successfully",
