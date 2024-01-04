@@ -5,6 +5,7 @@ const fs = require("fs")
 exports.createProduct = async (req,res)=>{
 
         const file = req.file
+        console.log(file)
         let filePath
          if(!file){
           filePath ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1dQPM88-Vq0f-YM8xILMQdKktXgKBMN6XH9cCBleA&s"
@@ -18,7 +19,7 @@ exports.createProduct = async (req,res)=>{
               })
           }
           // insert into the Product collection/table
-         await Product.create({
+        const productCreated =  await Product.create({
               productName ,
               productDescription ,
               productPrice,
@@ -28,7 +29,8 @@ exports.createProduct = async (req,res)=>{
       
           })
           res.status(200).json({
-              message : "Product Created Successfully"
+              message : "Product Created Successfully",
+              data : productCreated
           })
  
 
@@ -112,5 +114,57 @@ exports.editProduct = async(req,res)=>{
     res.status(200).json({
         messagee : "Product updated successfully",
         data : datas
+    })
+}
+
+exports.updateProductStatus = async(req,res)=>{
+    const {id} = req.params 
+    const {productStatus} = req.body 
+
+    if(!productStatus || !['available','unavailable'].includes(productStatus.toLowerCase())){
+        return res.status(400).json({
+            message : "productStatus is invalid or should be provided"
+        })
+    }
+    const product= await Product.findById(id)
+    if(!product){
+        return res.status(404).json({
+            message : "No product found with that id"
+        })
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(id,{
+          productStatus
+    },{new:true})
+
+    res.status(200).json({
+        message : "product status updated Successfully",
+        data : updatedProduct
+    })
+}
+
+exports.updateProductStockAndPrice =  
+async(req,res)=>{
+    const {id} = req.params 
+    const {productStockQty,productPrice} = req.body 
+
+    if(!productStockQty && !productPrice){
+        return res.status(400).json({
+            message : "Please provide productStockQty or productPrice"
+        })
+    }
+    const product= await Product.findById(id)
+    if(!product){
+        return res.status(404).json({
+            message : "No product found with that id"
+        })
+    }
+    const updatedProduct = await Product.findByIdAndUpdate(id,{
+        productStockQty : productStockQty ? productStockQty : product.productStockQty,
+        productPrice : productPrice ? productPrice : product.productPrice
+    },{new:true})
+
+    res.status(200).json({
+        message : "product status updated Successfully",
+        data : updatedProduct
     })
 }

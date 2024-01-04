@@ -1,4 +1,4 @@
-const { createProduct, deleteProduct, editProduct } = require("../../controller/admin/product/productController")
+const { createProduct, deleteProduct, editProduct, updateProductStatus, updateProductStockAndPrice } = require("../../controller/admin/product/productController")
 const isAuthenticated = require("../../middleware/isAuthenticated")
 const restrictTo = require("../../middleware/restrictTo")
 
@@ -16,9 +16,18 @@ router.route("/")
 .post(isAuthenticated,restrictTo("admin"),upload.single('productImage'), catchAsync( createProduct))
 .get(catchAsync(getProducts))
 
+router.route("/status/:id")
+.patch(isAuthenticated,restrictTo("admin"),updateProductStatus) 
+
+router.route("/stockprice/:id")
+.patch(isAuthenticated,restrictTo("admin"),updateProductStockAndPrice) 
+
 router.route("/:id")
 .get( catchAsync(getProduct))
 .delete( isAuthenticated,restrictTo("admin"), catchAsync(deleteProduct))
-.patch(isAuthenticated,restrictTo("admin"),upload.single('productImage'), editProduct)
+.patch(isAuthenticated,restrictTo("admin"),upload.single('productImage'), editProduct) 
+
+
+
 
 module.exports = router 
