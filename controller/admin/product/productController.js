@@ -1,3 +1,4 @@
+const Order = require("../../../model/orderSchema")
 const Product = require("../../../model/productModel")
 const fs = require("fs")
 
@@ -166,5 +167,24 @@ async(req,res)=>{
     res.status(200).json({
         message : "product status updated Successfully",
         data : updatedProduct
+    })
+}
+
+exports.getOrdersOfAProduct = async(req,res)=>{
+    const {id:productId} = req.params
+
+    // check if this productExist or not 
+    const product = await Product.findById(productId)
+    if(!product ){
+       return res.status(400).json({
+            message : "No product Found"
+        })
+    }
+    const orders = await Order.find({'items.product' : productId})
+    console.log(orders)
+
+    res.status(200).json({
+        message : "Product ORdres fetched",
+        data : orders
     })
 }

@@ -1,4 +1,4 @@
-const { createProduct, deleteProduct, editProduct, updateProductStatus, updateProductStockAndPrice } = require("../../controller/admin/product/productController")
+const { createProduct, deleteProduct, editProduct, updateProductStatus, updateProductStockAndPrice, getOrdersOfAProduct } = require("../../controller/admin/product/productController")
 const isAuthenticated = require("../../middleware/isAuthenticated")
 const restrictTo = require("../../middleware/restrictTo")
 
@@ -14,8 +14,9 @@ const upload = multer({storage : storage})
 
 router.route("/")
 .post(isAuthenticated,restrictTo("admin"),upload.single('productImage'), catchAsync( createProduct))
-.get(catchAsync(getProducts))
+.get( catchAsync(getProducts))
 
+router.route("/productOrders/:id").get(isAuthenticated,restrictTo("admin"),catchAsync(getOrdersOfAProduct))
 router.route("/status/:id")
 .patch(isAuthenticated,restrictTo("admin"),updateProductStatus) 
 
