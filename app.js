@@ -16,6 +16,9 @@ const cartRoute = require("./routes/user/cartRoute")
 const orderRoute = require("./routes/user/orderRoute")
 const adminOrdersRoute = require("./routes/admin/adminOrderRoute")
 const paymentRoute = require("./routes/user/paymentRoute")
+const dataServiceRoute = require("./routes/admin/dataServiceRoute")
+
+
 const User = require("./model/userModel")
 
 //Routes end here
@@ -53,6 +56,7 @@ app.use("/api/auth",authRoute)
 app.use("/api/products",productRoute)
 app.use("/api/admin",adminUsersRoute)
 app.use("/api/admin",adminOrdersRoute)
+app.use("/api/admin",dataServiceRoute)
 app.use("/api/reviews",userReviewRoute)
 app.use("/api/profile",profileRoute)
 app.use("/api/cart",cartRoute)
