@@ -87,6 +87,7 @@ exports.forgotPassword = async (req,res)=>{
 
     // check if that email is registered or not
     const userExist = await User.find({userEmail : email})
+    
     if(userExist.length == 0){
         return res.status(404).json({
             message : "Email is not registered"
@@ -119,7 +120,7 @@ exports.verifyOtp = async(req,res)=>{
         })
     }
     // check if that otp is correct or not of that email
-   const userExists = await User.find({userEmail : email})
+   const userExists = await User.find({userEmail : email}).select("+otp +isOtpVerified")
    console.log(userExists)
    if(userExists.length == 0){
     return res.status(404).json({
@@ -127,7 +128,7 @@ exports.verifyOtp = async(req,res)=>{
     })
    }
    console.log(userExists[0].otp, otp)
-   if(userExists[0].otp !== otp){
+   if(userExists[0].otp !== otp*1){
 
     res.status(400).json({
         message : "Invalid otp"
@@ -158,13 +159,14 @@ exports.resetPassword = async (req,res)=>{
         })
     }
 
-    const userExists = await User.find({userEmail:email})
+    const userExists = await User.find({userEmail:email}).select("+isOtpVerified")
     if(userExists.length == 0){
         return res.status(404).json({
             message : "User email not registered"
         })
     }
-    if(userExists[0].isOtpVerified !== true){
+    console.log(userExists)
+    if(userExists[0].isOtpVerified != true){
         return res.status(403).json({
             message : "You cannot perform this action"
         })
