@@ -4,7 +4,8 @@ const app = express()
 
 const {Server} =  require("socket.io")
 const cors = require("cors")
-
+const jwt = require("jsonwebtoken")
+const {promisify} = require("util")
 
 //ROUTES HERE
 const authRoute = require("./routes/auth/authRoute")
@@ -72,7 +73,54 @@ const PORT = process.env.PORT
 const server = app.listen(3000,()=>{
     console.log(`Server has started at PORT ${PORT} ` )
 })
-const io = new Server(server)
+const io = new Server(server,{
+    cors : "http://localhost:3001"
+})
+
+let onlineUsers = []
+
+const addToOnlineUsers = (socketId,userId,role)=>{
+   onlineUsers =  onlineUsers.filter((user)=>user.userId !== userId)
+    onlineUsers.push({socketId,userId,role})
+    console.log(onlineUsers)
+}
+
+io.on("connection",async (socket)=>{
+   // take the token and validate it 
+   const {token} = socket.handshake.auth 
+   if(token){
+        // validate the token 
+        const decoded = await promisify(jwt.verify)(token,process.env.SECRET_KEY)
+        const doesUserExist =  await User.findOne({_id : decoded.id})
+       if(doesUserExist){
+        addToOnlineUsers(socket.id,doesUserExist.id,doesUserExist.role)
+       }
+
+   }
+
+   socket.on("updateOrderStatus",({status,orderId,userId})=>{
+     const findUser = onlineUsers.find((user)=>user.userId == userId)
+    
+     io.to(findUser.socketId).emit("statusUpdated",{status,orderId})
+   })
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
