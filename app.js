@@ -74,7 +74,7 @@ const server = app.listen(3000,()=>{
     console.log(`Server has started at PORT ${PORT} ` )
 })
 const io = new Server(server,{
-    cors : "http://localhost:3001"
+    cors : ["https://104-f-digital-momoadmin.vercel.app/","https://104f-digital-momo-frontend.vercel.app/"]
 })
 
 let onlineUsers = []
